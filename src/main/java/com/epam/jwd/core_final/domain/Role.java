@@ -32,6 +32,11 @@ public enum Role implements BaseEntity {
      * @throws UnknownEntityException if such id does not exist
      */
     public static Role resolveRoleById(int id) {
-        return null;
+        for(Role role : values()){
+            if(role.id.equals(id)){
+                return role;
+            }
+        }
+        throw new UnknownEntityException("Unknown role !!!");
     }
 }
