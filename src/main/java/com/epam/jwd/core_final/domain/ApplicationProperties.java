@@ -1,5 +1,11 @@
 package com.epam.jwd.core_final.domain;
 
+import com.epam.jwd.core_final.util.PropertyReaderUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.time.format.DateTimeFormatter;
+
 /**
  * This class should be IMMUTABLE!
  * <p>
@@ -16,30 +22,27 @@ package com.epam.jwd.core_final.domain;
  */
 
 public class ApplicationProperties {
+    public static final Logger LOGGER = LoggerFactory.getLogger(ApplicationProperties.class);
     //todo
 
-    private String inputRootDir;
-    private String outputRootDir;
-    private String crewFileName;
-    private String missionFileName;
-    private String spaceshipsFileName;
-    private Integer fileRefreshRate;
-    private String dateTimeFormat;
+    private final String inputRootDir;
+    private final String outputRootDir;
+    private final String crewFileName;
+    private final String missionsFileName;
+    private final String spaceshipsFileName;
+    private final Integer fileRefreshRate;
+    private final DateTimeFormatter dateTimeFormat;
 
-    private ApplicationProperties(String inputRootDir,
-                                 String outputRootDir,
-                                 String crewFileName,
-                                 String missionFileName,
-                                 String spaceshipsFileName,
-                                 Integer fileRefreshRate,
-                                 String dateTimeFormat){
-        this.crewFileName = crewFileName;
+    public ApplicationProperties(String inputRootDir, String outputRootDir, String crewFilename,
+                                 String missionsFileName, String spaceshipsFileName, Integer fileRefreshRate,
+                                 DateTimeFormatter patternForDateTimeFormatter) {
         this.inputRootDir = inputRootDir;
-        this.dateTimeFormat = dateTimeFormat;
         this.outputRootDir = outputRootDir;
-        this.missionFileName = missionFileName;
+        this.crewFileName = crewFilename;
+        this.missionsFileName = missionsFileName;
         this.spaceshipsFileName = spaceshipsFileName;
         this.fileRefreshRate = fileRefreshRate;
+        this.dateTimeFormat = patternForDateTimeFormatter;
     }
 
     public String getInputRootDir() {
@@ -55,7 +58,7 @@ public class ApplicationProperties {
     }
 
     public String getMissionFileName() {
-        return missionFileName;
+        return missionsFileName;
     }
 
     public String getSpaceshipsFileName() {
@@ -66,8 +69,12 @@ public class ApplicationProperties {
         return fileRefreshRate;
     }
 
-    public String getDateTimeFormat() {
+    public DateTimeFormatter getDateTimeFormat() {
         return dateTimeFormat;
+    }
+
+/*    public static Builder builder(){
+        return new Builder();
     }
 
     private static class Builder{
@@ -78,6 +85,10 @@ public class ApplicationProperties {
         private String spaceshipsFileName;
         private Integer fileRefreshRate;
         private String dateTimeFormat;
+
+        private Builder(){
+
+        }
 
         public Builder setInputRootDir(String inputRootDir){
             this.inputRootDir = inputRootDir;
@@ -117,11 +128,11 @@ public class ApplicationProperties {
         public ApplicationProperties build(){
             return new ApplicationProperties(this.inputRootDir,
                     this.outputRootDir,
-                    this.crewFileName,
+                   this.crewFileName,
                     this.missionFileName,
                     this.spaceshipsFileName,
                     this.fileRefreshRate,
                     this.dateTimeFormat);
         }
-    }
+    }*/
 }

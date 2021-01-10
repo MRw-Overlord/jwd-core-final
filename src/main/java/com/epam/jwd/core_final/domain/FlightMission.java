@@ -2,6 +2,7 @@ package com.epam.jwd.core_final.domain;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Expected fields:
@@ -17,25 +18,25 @@ import java.util.List;
 public class FlightMission extends AbstractBaseEntity {
     // todo
 
-    private String name;
     private LocalDate startDate;
     private LocalDate endDate;
     private long missionsDistance;
-    private Spaceship spaceship;
-    private List<CrewMember> crew;
+    private Spaceship assignedSpaceship;
+    private List<CrewMember> assignedCrew;
     private MissionResult missionResult;
 
-    public FlightMission(String name, LocalDate startDate, LocalDate endDate, long missionsDistance) {
+    public FlightMission(String name,
+                         LocalDate startDate,
+                         LocalDate endDate,
+                         long missionsDistance,
+                         MissionResult flightMissionResult) {
         super(name);
         this.startDate = startDate;
         this.endDate = endDate;
         this.missionsDistance = missionsDistance;
+        this.missionResult = flightMissionResult;
     }
 
-    @Override
-    public String getName() {
-        return name;
-    }
 
     public LocalDate getStartDate() {
         return startDate;
@@ -49,20 +50,16 @@ public class FlightMission extends AbstractBaseEntity {
         return missionsDistance;
     }
 
-    public Spaceship getSpaceship() {
-        return spaceship;
+    public Spaceship getAssignedSpaceship() {
+        return assignedSpaceship;
     }
 
-    public List<CrewMember> getCrew() {
-        return crew;
+    public List<CrewMember> getAssignedCrew() {
+        return assignedCrew;
     }
 
     public MissionResult getMissionResult() {
         return missionResult;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void setStartDate(LocalDate startDate) {
@@ -77,12 +74,12 @@ public class FlightMission extends AbstractBaseEntity {
         this.missionsDistance = missionsDistance;
     }
 
-    public void setSpaceship(Spaceship spaceship) {
-        this.spaceship = spaceship;
+    public void setAssignedSpaceship(Spaceship assignedSpaceship) {
+        this.assignedSpaceship = assignedSpaceship;
     }
 
-    public void setCrew(List<CrewMember> crew) {
-        this.crew = crew;
+    public void setAssignedCrew(List<CrewMember> crew) {
+        this.assignedCrew = crew;
     }
 
     public void setMissionResult(MissionResult missionResult) {
@@ -91,9 +88,26 @@ public class FlightMission extends AbstractBaseEntity {
 
     @Override
     public String toString() {
-        return ("Flight Mission -- Mission name " + name
-                + " Mission start: " + startDate
-                + " Mission end: " + endDate
-                + " Mission Distance: " + missionsDistance);
+        return "FlightMission{" +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", missionsDistance=" + missionsDistance +
+                ", spaceship=" + assignedSpaceship +
+                ", assignedCrew=" + assignedCrew +
+                ", missionResult=" + missionResult +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FlightMission that = (FlightMission) o;
+        return missionsDistance == that.missionsDistance && startDate.equals(that.startDate) && endDate.equals(that.endDate) && assignedSpaceship.equals(that.assignedSpaceship) && assignedCrew.equals(that.assignedCrew) && missionResult == that.missionResult;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(startDate, endDate, missionsDistance, assignedSpaceship, assignedCrew, missionResult);
     }
 }

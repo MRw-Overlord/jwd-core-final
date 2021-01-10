@@ -23,8 +23,8 @@ public enum Rank implements BaseEntity {
      * todo via java.lang.enum methods!
      */
     @Override
-    public String getName() {                //todo: ask question on the lecture
-        return null;
+    public String getName() {
+        return this.name();
     }
 
     /**
@@ -33,8 +33,8 @@ public enum Rank implements BaseEntity {
      * @throws UnknownEntityException if such id does not exist
      */
     public static Rank resolveRankById(int id) {
-        for(Rank rank : values()){
-            if(rank.id.equals(id)){
+        for(Rank rank : Rank.values()){
+            if(rank.id == id){
                 return rank;
             }
         }

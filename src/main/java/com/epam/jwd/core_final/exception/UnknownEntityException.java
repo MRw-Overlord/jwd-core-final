@@ -1,9 +1,11 @@
 package com.epam.jwd.core_final.exception;
 
+import com.epam.jwd.core_final.domain.BaseEntity;
+
 public class UnknownEntityException extends RuntimeException {
 
     private final String entityName;
-    private final Object[] args;
+    private final BaseEntity[] args;
 
     public UnknownEntityException(String entityName) {
         super();
@@ -11,7 +13,7 @@ public class UnknownEntityException extends RuntimeException {
         this.args = null;
     }
 
-    public UnknownEntityException(String entityName, Object[] args) {
+    public UnknownEntityException(String entityName, BaseEntity[] args) {
         super();
         this.entityName = entityName;
         this.args = args;
@@ -21,6 +23,12 @@ public class UnknownEntityException extends RuntimeException {
     public String getMessage() {
         // todo
         // you should use entityName, args (if necessary)
-        return null;
+        if(args == null) {
+            return this.entityName + ": " + super.getMessage();
+        } String message = null;
+        for(BaseEntity someEntity : args){
+            message = message + someEntity.getName() + super.getMessage() + "\n";
+        }
+        return message;
     }
 }
