@@ -13,7 +13,6 @@ public class Main {
         } catch (InvalidStateException e){
             LOGGER.error("Your application is died :[");
         }
-        LOGGER.info("Ty loh)))");
 
     }
 
