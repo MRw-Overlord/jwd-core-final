@@ -3,35 +3,41 @@ package com.epam.jwd.core_final.service.impl;
 import com.epam.jwd.core_final.context.ApplicationContext;
 import com.epam.jwd.core_final.context.impl.NassaContext;
 import com.epam.jwd.core_final.criteria.Criteria;
+import com.epam.jwd.core_final.criteria.FlightMissionCriteria;
 import com.epam.jwd.core_final.criteria.SpaceshipCriteria;
 import com.epam.jwd.core_final.domain.FlightMission;
+import com.epam.jwd.core_final.domain.Role;
 import com.epam.jwd.core_final.domain.Spaceship;
 import com.epam.jwd.core_final.exception.EntityIsNotToBeAssignedException;
-import com.epam.jwd.core_final.exception.EntityIsNotUniqException;
+import com.epam.jwd.core_final.exception.NotUniqEntityException;
+import com.epam.jwd.core_final.factory.impl.SpaceshipFactory;
 import com.epam.jwd.core_final.service.SpaceshipService;
+
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SpaceshipServiceImpl implements SpaceshipService {
     private static SpaceshipServiceImpl instance;
-    private final ApplicationContext applicationContext;
+    protected List<Spaceship> spaceshipsList;
 
-    private SpaceshipServiceImpl(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
+    private SpaceshipServiceImpl() {
+        ApplicationContext applicationContext = NassaContext.getInstance();
+        this.spaceshipsList = (List<Spaceship>) applicationContext.retrieveBaseEntityList(Spaceship.class);
     }
 
     public static SpaceshipServiceImpl getInstance() {
         if (instance == null) {
-            instance = new SpaceshipServiceImpl(NassaContext.getInstance());
+            instance = new SpaceshipServiceImpl();
         }
         return instance;
     }
 
     @Override
     public List<Spaceship> findAllSpaceships() {
-        return (List<Spaceship>) NassaContext.getInstance().retrieveBaseEntityList(Spaceship.class);
+        return this.spaceshipsList;
     }
 
     @Override
@@ -61,37 +67,40 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     }
 
     @Override
-    public Spaceship updateSpaceshipDetails(Spaceship olsSpaceship, Spaceship newSpaceship) {
-        olsSpaceship.setTotalAvailableFlightDistance(newSpaceship.getTotalAvailableFlightDistance());
-        olsSpaceship.setReadyForNextMissions(newSpaceship.isReadyForNextMissions());
-        return olsSpaceship;
+    public Spaceship updateSpaceshipDetails(Spaceship spaceship) {
+        spaceshipsList.set(Integer.parseInt(spaceship.getId().toString()) - 1, spaceship);
+        return spaceship;
     }
 
     @Override
     public void assignSpaceshipOnMission(Spaceship spaceship) throws EntityIsNotToBeAssignedException {
-        Collection<FlightMission> allFlightMissions = applicationContext.retrieveBaseEntityList(FlightMission.class);
-        allFlightMissions.forEach(flightMission -> {
-            if (flightMission.getAssignedSpaceship().equals(spaceship)){
-                throw new EntityIsNotToBeAssignedException(Spaceship.class.getSimpleName());
-            }
-        });
-        spaceship.setReadyForNextMissions(false);
+        if (!spaceship.isReadyForNextMissions()) throw new EntityIsNotToBeAssignedException();
+        MissionServiceImpl missionService = MissionServiceImpl.getInstance();
+        FlightMissionCriteria flightMissionCriteria = new FlightMissionCriteria.Builder()
+                .setDistant(spaceship.getTotalAvailableFlightDistance())
+                .build();
+        flightMissionCriteria.setAssignedSpaceShift(false);
+        Optional<FlightMission> optionalMission = missionService.findMissionByCriteria(flightMissionCriteria);
+        if (optionalMission.isPresent()) {
+            FlightMission suitableMission = optionalMission.get();
+            suitableMission.setAssignedSpaceship(spaceship);
+            missionService.updateSpaceshipDetails(suitableMission);
+            spaceship.setReadyForNextMissions(false);
+            this.updateSpaceshipDetails(spaceship);
+        } else {
+            throw new EntityIsNotToBeAssignedException();
+        }
     }
 
     @Override
-    public Spaceship createSpaceship(Spaceship spaceship) throws RuntimeException {
-        List<Spaceship> allSpaceships = findAllSpaceships();
-        allSpaceships.forEach(spaceshipFromContext -> {
-            if (spaceshipFromContext.getName().equalsIgnoreCase(spaceship.getName())) {
-                throw new EntityIsNotUniqException("Spaceship with the same name is already in the context");
-            }
-        });
-        return saveSpaceship(spaceship);
-    }
-
-    private Spaceship saveSpaceship(Spaceship spaceship) {
-        applicationContext.retrieveBaseEntityList(Spaceship.class).add(spaceship);
+    public Spaceship createSpaceship(String name, Long distance, Map<Role, Short> crew) throws RuntimeException, NotUniqEntityException {
+        Spaceship spaceship = SpaceshipFactory.getInstance().create(name, distance, crew);
+        Optional<Spaceship> spaceshipOptional = findSpaceshipByCriteria(new SpaceshipCriteria.Builder() {{
+            setName(name);
+        }}.build());
+        Collection<Spaceship> spaceships = findAllSpaceships();
+        spaceships.add(spaceship);
         return spaceship;
     }
-
 }
+

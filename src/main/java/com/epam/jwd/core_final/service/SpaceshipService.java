@@ -1,11 +1,14 @@
 package com.epam.jwd.core_final.service;
 
 import com.epam.jwd.core_final.criteria.Criteria;
+import com.epam.jwd.core_final.domain.Role;
 import com.epam.jwd.core_final.domain.Spaceship;
 import com.epam.jwd.core_final.exception.EntityIsNotToBeAssignedException;
 import com.epam.jwd.core_final.exception.EntityIsNotToBeCreatedException;
+import com.epam.jwd.core_final.exception.NotUniqEntityException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -20,12 +23,11 @@ public interface SpaceshipService {
 
     Optional<Spaceship> findSpaceshipByCriteria(Criteria<? extends Spaceship> criteria);
 
-    Spaceship updateSpaceshipDetails(Spaceship olsSpaceship, Spaceship newSpaceship);
-
+    Spaceship updateSpaceshipDetails(Spaceship spaceship);
     // todo create custom exception for case, when spaceship is not able to be assigned
     void assignSpaceshipOnMission(Spaceship crewMember) throws EntityIsNotToBeAssignedException;
 
     // todo create custom exception for case, when crewMember is not able to be created (for example - duplicate.
     // spaceship unique criteria - only name!
-    Spaceship createSpaceship(Spaceship spaceship) throws EntityIsNotToBeCreatedException;
+    public Spaceship createSpaceship(String name, Long distance, Map<Role, Short> crew) throws RuntimeException, NotUniqEntityException;
 }

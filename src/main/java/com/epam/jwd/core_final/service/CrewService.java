@@ -20,7 +20,7 @@ public interface CrewService {
 
     Optional<CrewMember> findCrewMemberByCriteria(Criteria<? extends CrewMember> criteria);
 
-    CrewMember updateCrewMemberDetails(CrewMember oldCrewMember, CrewMember newCrewMember);
+    CrewMember updateCrewMemberDetails(CrewMember crewMember);
 
     // todo create custom exception for case, when crewMember is not able to be assigned
     void assignCrewMemberOnMission(CrewMember crewMember) throws EntityIsNotToBeAssignedException;

@@ -2,11 +2,15 @@ package com.epam.jwd.core_final.service.impl;
 
 import com.epam.jwd.core_final.context.ApplicationContext;
 import com.epam.jwd.core_final.context.impl.NassaContext;
+import com.epam.jwd.core_final.criteria.CrewMemberCriteria;
 import com.epam.jwd.core_final.criteria.Criteria;
 import com.epam.jwd.core_final.criteria.FlightMissionCriteria;
+import com.epam.jwd.core_final.criteria.SpaceshipCriteria;
 import com.epam.jwd.core_final.domain.FlightMission;
-import com.epam.jwd.core_final.exception.EntityIsNotUniqException;
+import com.epam.jwd.core_final.exception.NotUniqEntityException;
 import com.epam.jwd.core_final.service.MissionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,23 +18,24 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MissionServiceImpl implements MissionService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MissionServiceImpl.class);
     private static MissionServiceImpl instance;
-    private final ApplicationContext applicationContext;
+    protected List<FlightMission> missionList = new ArrayList<>();
 
-    private MissionServiceImpl(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
+    private MissionServiceImpl() {
+
     }
 
     public static MissionServiceImpl getInstance() {
         if (instance == null) {
-            instance = new MissionServiceImpl(NassaContext.getInstance());
+            instance = new MissionServiceImpl();
         }
         return instance;
     }
 
     @Override
     public List<FlightMission> findAllMissions() {
-        return new ArrayList<>(applicationContext.retrieveBaseEntityList(FlightMission.class));
+        return this.missionList;
     }
 
     @Override
@@ -60,26 +65,39 @@ public class MissionServiceImpl implements MissionService {
     }
 
     @Override
-    public FlightMission updateSpaceshipDetails(FlightMission oldFlightMission, FlightMission newFlightMission) {
-        oldFlightMission.setMissionsDistance(newFlightMission.getMissionsDistance());
-        oldFlightMission.setStartDate(newFlightMission.getStartDate());
-        oldFlightMission.setEndDate(newFlightMission.getEndDate());
-        return oldFlightMission;
+    public FlightMission updateSpaceshipDetails(FlightMission flightMission) {
+        missionList.set(Integer.parseInt(flightMission.getId().toString()) - 1, flightMission);
+        return flightMission;
     }
 
     @Override
     public FlightMission createMission(FlightMission flightMission) {
-        List<FlightMission> allFlightMissions = findAllMissions();
-        allFlightMissions.forEach(mission -> {
-            if (mission.getName().equalsIgnoreCase(flightMission.getName())) {
-                throw new EntityIsNotUniqException("This flight mission is already start and don't uniq!!!!");
-            }
-        });
-        return saveFlightMission(flightMission);
-    }
+        missionList.add(flightMission);
+        SpaceshipServiceImpl spaceshipCrud = SpaceshipServiceImpl.getInstance();
+        SpaceshipCriteria spaceshipCriteria = new SpaceshipCriteria.Builder().setIsReadyForNextMissions(true).build();
+        spaceshipCrud.findAllSpaceshipsByCriteria(spaceshipCriteria)
+                .forEach(e -> {
+                    try {
+                        spaceshipCrud.assignSpaceshipOnMission(e);
+                    } catch (RuntimeException err) {
+                        LOGGER.error(err.getMessage());
+                    }
+                });
 
-    private FlightMission saveFlightMission(FlightMission flightMission) {
-        applicationContext.retrieveBaseEntityList(FlightMission.class).add(flightMission);
+
+        CrewServiceImpl crewService = CrewServiceImpl.getInstance();
+        CrewMemberCriteria crewMemberCriteria = new CrewMemberCriteria.Builder()
+                .setDoesHeIsSurvive(true).build();
+        crewService.findAllCrewMembersByCriteria(crewMemberCriteria)
+                .forEach(e -> {
+                    try {
+                        crewService.assignCrewMemberOnMission(e);
+                    } catch (RuntimeException err) {
+                        LOGGER.error(err.getMessage());
+                    }
+                });
+
+
         return flightMission;
     }
 }

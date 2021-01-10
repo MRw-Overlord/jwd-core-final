@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 
 // todo
 public class NassaContext implements ApplicationContext {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(NassaContext.class);
     private static NassaContext instance;
     private static final ApplicationProperties APPLICATION_PROPERTIES = (ApplicationProperties) PropertyReaderUtil
@@ -50,6 +49,7 @@ public class NassaContext implements ApplicationContext {
         }
         return instance;
     }
+
 
 
     @Override

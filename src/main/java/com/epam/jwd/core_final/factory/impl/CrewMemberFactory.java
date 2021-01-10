@@ -8,6 +8,7 @@ import com.epam.jwd.core_final.factory.EntityFactory;
 // do the same for other entities
 public class CrewMemberFactory implements EntityFactory<CrewMember> {
     private static CrewMemberFactory instance;
+    private Long Id= 1L;
 
     private CrewMemberFactory() {
 
@@ -23,6 +24,6 @@ public class CrewMemberFactory implements EntityFactory<CrewMember> {
 
     @Override
     public CrewMember create(Object... args) {
-        return new CrewMember((String) args[0], (Role) args[1], (Rank) args[2]);
+        return new CrewMember((String) args[0], (Role) args[1], (Rank) args[2], Id++);
     }
 }

@@ -15,17 +15,12 @@ public class CrewMember extends AbstractBaseEntity {
     private Rank rank;
     private boolean doesHeIsSurvive = true;
 
-    public CrewMember(String name, Role role, Rank rank) {
-        super(name);
+    public CrewMember(String name, Role role, Rank rank, Long id) {
+        super(name, id);
         this.role = role;
         this.rank = rank;
     }
 
-    public CrewMember(String member) {
-        super((String) member.subSequence(2, member.length() - 3));
-        this.role = Role.resolveRoleById(Integer.parseInt(String.valueOf(member.charAt(0))));
-        this.rank = Rank.resolveRankById((Integer.parseInt(String.valueOf(member.charAt((member.length() - 1))))));
-    }
 
     public Role getRole() {
         return role;

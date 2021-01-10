@@ -29,8 +29,8 @@ public class FlightMission extends AbstractBaseEntity {
                          LocalDate startDate,
                          LocalDate endDate,
                          long missionsDistance,
-                         MissionResult flightMissionResult) {
-        super(name);
+                         MissionResult flightMissionResult, Long id) {
+        super(name, id);
         this.startDate = startDate;
         this.endDate = endDate;
         this.missionsDistance = missionsDistance;

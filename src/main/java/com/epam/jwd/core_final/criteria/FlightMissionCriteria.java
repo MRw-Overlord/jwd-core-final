@@ -12,12 +12,13 @@ import java.util.List;
  * Should be a builder for {@link com.epam.jwd.core_final.domain.FlightMission} fields
  */
 public class FlightMissionCriteria extends Criteria<FlightMission> {
-    private final LocalDate startDate;
-    private final LocalDate endDate;
-    private final Spaceship assignedSpaceship;
-    private final Long distance;
-    private final MissionResult missionResult;
-    private final List<CrewMember> assignedCrew;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private Spaceship assignedSpaceship;
+    private Long distance;
+    private MissionResult missionResult;
+    private List<CrewMember> assignedCrew;
+    private Boolean assignedSpaceShift;
 
     private FlightMissionCriteria(Builder builder) {
         super(builder);
@@ -52,6 +53,40 @@ public class FlightMissionCriteria extends Criteria<FlightMission> {
     public List<CrewMember> getAssignedCrew() {
         return assignedCrew;
     }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setAssignedSpaceship(Spaceship assignedSpaceship) {
+        this.assignedSpaceship = assignedSpaceship;
+    }
+
+    public void setDistance(Long distance) {
+        this.distance = distance;
+    }
+
+    public void setMissionResult(MissionResult missionResult) {
+        this.missionResult = missionResult;
+    }
+
+    public void setAssignedCrew(List<CrewMember> assignedCrew) {
+        this.assignedCrew = assignedCrew;
+    }
+
+    public void setAssignedSpaceShift(Boolean assignedSpaceShift) {
+        this.assignedSpaceShift = assignedSpaceShift;
+    }
+
+    public Boolean setAssignedSpaceShift() {
+        return assignedSpaceShift;
+    }
+
+
 
     public static class Builder extends Criteria.Builder {
         private LocalDate startDate;

@@ -31,6 +31,11 @@ public class CrewMemberCriteria extends Criteria<CrewMember> {
         return doesHeIsSurvive;
     }
 
+    @Override
+    public void setName(String name) {
+        super.setName(name);
+    }
+
     public static class Builder extends Criteria.Builder{
         private Role role;
         private Rank rank;
