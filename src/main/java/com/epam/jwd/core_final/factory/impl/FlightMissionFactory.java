@@ -9,13 +9,14 @@ import java.time.LocalDate;
 
 public class FlightMissionFactory implements EntityFactory<FlightMission> {
     private static FlightMissionFactory instance;
+    private Long id = 1L;
 
-    private FlightMissionFactory(){
+    private FlightMissionFactory() {
 
     }
 
-    public static FlightMissionFactory getInstance(){
-        if(instance == null){
+    public static FlightMissionFactory getInstance() {
+        if (instance == null) {
             instance = new FlightMissionFactory();
         }
         return instance;
@@ -23,10 +24,10 @@ public class FlightMissionFactory implements EntityFactory<FlightMission> {
 
     @Override
     public FlightMission create(Object... args) {
-        return new FlightMission((String) args[0],
+        return new FlightMission(id++, (String) args[0],
                 (LocalDate) args[1],
                 (LocalDate) args[2],
                 (Long) args[3],
-                (MissionResult) args[4], (Long) args[5]);
+                (MissionResult) args[4]);
     }
 }

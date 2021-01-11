@@ -13,7 +13,6 @@ import com.epam.jwd.core_final.domain.Spaceship;
 import com.epam.jwd.core_final.exception.EntityIsNotToBeAssignedException;
 import com.epam.jwd.core_final.exception.NotUniqEntityException;
 import com.epam.jwd.core_final.service.CrewService;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

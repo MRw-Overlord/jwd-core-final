@@ -1,11 +1,9 @@
 package com.epam.jwd.core_final.util;
 
-import com.epam.jwd.core_final.Main;
 import com.epam.jwd.core_final.domain.ApplicationProperties;
 import com.epam.jwd.core_final.exception.ApplicationPropertiesException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +28,7 @@ public final class PropertyReaderUtil {
      * values from property file
      */
     public static void loadProperties() {
-        final String propertiesFileName = "src/main/resource/application.properties";
+        final String propertiesFileName = "src/main/resources/application.properties";
         try (InputStream inputStream = new FileInputStream(propertiesFileName)) {
             StringBuilder text = new StringBuilder();
             int count = -1;
