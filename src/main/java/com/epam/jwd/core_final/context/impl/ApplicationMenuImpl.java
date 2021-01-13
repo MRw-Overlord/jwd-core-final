@@ -85,8 +85,8 @@ public class ApplicationMenuImpl implements ApplicationMenu {
     @Override
     public void printAvailableOptions() {
         System.out.println("Welcome to the club buddy !!!");
-        boolean uss = true;
-        while (uss) {
+        boolean logic = true;
+        while (logic) {
             System.out.println(MAIN_MENU);
             String wewee = handleUserInput("Enter command: ");
             switch (wewee.toLowerCase()) {
@@ -178,7 +178,7 @@ public class ApplicationMenuImpl implements ApplicationMenu {
                 }
                 case ("8"):
                 case ("exit"): {
-                    uss = false;
+                    logic = false;
                     break;
                 }
                 default: {
