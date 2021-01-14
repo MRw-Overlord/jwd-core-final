@@ -1,73 +1,120 @@
 package com.epam.jwd.core_final.criteria;
 
-import com.epam.jwd.core_final.domain.BaseEntity;
 import com.epam.jwd.core_final.domain.Role;
 import com.epam.jwd.core_final.domain.Spaceship;
-
-import java.util.Map;
 
 /**
  * Should be a builder for {@link Spaceship} fields
  */
 public class SpaceshipCriteria extends Criteria<Spaceship> {
-    private Long flightDistance;
-    private Boolean isReadyForNextMissions;
-    private Role isVacant;
-    private Map<Role, Short> crew;
 
-    private SpaceshipCriteria(Builder builder) {
-        super(builder);
-        this.flightDistance = builder.flightDistance;
-        this.isReadyForNextMissions = builder.isReadyForNextMissions;
-        this.isVacant = builder.isVacant;
-        this.crew = builder.crew;
+    private final Role roleInNumber;
+    private final Short smallerNumberOfRole;
+    private final Short biggestNumberOfRole;
+    private final Long smallerNumberRole;
+    private final Long biggestNumberRole;
+    private final Boolean readinessForNextMission;
+
+    private SpaceshipCriteria(Long whereId, String whereName, Role roleInNumber,
+                              Short smallerNumberOfRole, Short biggestNumberOfRole, Long biggestNumberRole,
+                              Long smallerNumberRole, Boolean readinessForNextMission) {
+        super(whereId, whereName);
+        this.roleInNumber = roleInNumber;
+        this.smallerNumberOfRole = smallerNumberOfRole;
+        this.biggestNumberOfRole = biggestNumberOfRole;
+        this.smallerNumberRole = smallerNumberRole;
+        this.biggestNumberRole = biggestNumberRole;
+        this.readinessForNextMission = readinessForNextMission;
     }
 
-    public Map<Role, Short> getCrew() {
-        return crew;
+    public Role getRoleInNumber() {
+        return roleInNumber;
     }
 
-    public Role getIsVacant() {
-        return isVacant;
+    public Short getSmallerNumberOfRole() {
+        return smallerNumberOfRole;
     }
 
-    public Long getFlightDistance() {
-        return flightDistance;
+    public Short getBiggestNumberOfRole() {
+        return biggestNumberOfRole;
     }
 
-    public Boolean getReadyForNextMissions() {
-        return isReadyForNextMissions;
+    public Long getSmallerNumberRole() {
+        return smallerNumberRole;
     }
 
-    public static class Builder extends Criteria.Builder {
-        private Long flightDistance;
-        private Boolean isReadyForNextMissions;
-        private Role isVacant;
-        private Map<Role, Short> crew;
+    public Long getBiggestNumberRole() {
+        return biggestNumberRole;
+    }
 
-        public Builder setIsVacant(Role isVacant) {
-            this.isVacant = isVacant;
+    public Boolean getReadinessForNextMission() {
+        return readinessForNextMission;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    private static class Builder {
+
+        private Long id;
+        private String name;
+        private Role roleExistInCapacity;
+        private Short lesserCountOfRole;
+        private Short greaterCountOfRole;
+        private Long lesserFlightDistance;
+        private Long greaterFlightDistance;
+        private Boolean readyForNextMission;
+
+        public Builder setId(Long id) {
+            this.id = id;
             return this;
         }
 
-        public Builder setCrew(Map<Role, Short> crew) {
-            this.crew = crew;
+        public Builder setName(String name) {
+            this.name = name;
             return this;
         }
 
-        public Builder setFlightDistance(Long flightDistance) {
-            this.flightDistance = flightDistance;
+        public Builder setRoleExistInCapacity(Role role) {
+            this.roleExistInCapacity = role;
             return this;
         }
 
+        public Builder setLesserCountOfRole(Short countOfRole) {
+            this.lesserCountOfRole = countOfRole;
+            return this;
+        }
 
-        public Builder setIsReadyForNextMissions(Boolean isReadyForNextMissions) {
-            this.isReadyForNextMissions = isReadyForNextMissions;
+        public Builder setGreaterCountOfRole(Short countOfRole) {
+            this.greaterCountOfRole = countOfRole;
+            return this;
+        }
+
+        public Builder setLesserFlightDistance(Long flightDistance) {
+            this.lesserFlightDistance = flightDistance;
+            return this;
+        }
+
+        public Builder setGreaterFlightDistance(Long flightDistance) {
+            this.greaterFlightDistance = flightDistance;
+            return this;
+        }
+
+        public Builder setReadyForNextMission(Boolean isReadyForNextMission) {
+            this.readyForNextMission = isReadyForNextMission;
             return this;
         }
 
         public SpaceshipCriteria build() {
-            return new SpaceshipCriteria(this);
+            return new SpaceshipCriteria(id,
+                    this.name,
+                    this.roleExistInCapacity,
+                    this.lesserCountOfRole,
+                    this.greaterCountOfRole,
+                    this.lesserFlightDistance,
+                    this.greaterFlightDistance,
+                    this.readyForNextMission);
         }
     }
 }

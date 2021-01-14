@@ -11,50 +11,37 @@ import java.util.Objects;
  */
 public class CrewMember extends AbstractBaseEntity {
     // todo
-    private Role role;
-    private Rank rank;
-    private boolean doesHeIsSurvive = true;
+    private static Long idUnique = 0L;
 
-    public CrewMember(String name, Role role, Rank rank, Long id) {
-        super(name, id);
-        this.role = role;
-        this.rank = rank;
+    private final Role memberRole;
+    private Rank memberRank;
+    private Boolean isReadyForNextMissions;
+
+    public CrewMember(String name, Role memberRole, Rank memberRank) {
+        super(idUnique++, name);
+        this.memberRole = memberRole;
+        this.memberRank = memberRank;
+        this.isReadyForNextMissions = true;
     }
 
-
-    public Role getRole() {
-        return role;
+    public Role getMemberRole() {
+        return memberRole;
     }
 
-    public Rank getRank() {
-        return rank;
+    public Rank getMemberRank() {
+        return memberRank;
     }
 
-    public boolean isDoesHeIsSurvive() {
-        return doesHeIsSurvive;
+    public void setMemberRank(Rank memberRank) {
+        this.memberRank = memberRank;
     }
 
-    public void setDoesHeIsSurvive(boolean doesHeIsSurvive) {
-        this.doesHeIsSurvive = doesHeIsSurvive;
+    public Boolean getReadyForNextMissions() {
+        return isReadyForNextMissions;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public void setRank(Rank rank) {
-        this.rank = rank;
-    }
-
-    @Override
-    public String toString() {
-        return "CrewMember{" +
-                "id=" + getId() +
-                ", name=" + getName() +
-                ", memberRole=" + role +
-                ", memberRank=" + rank +
-                ", isReadyForNextMissions=" + doesHeIsSurvive +
-                '}';
+    public void setReadyForNextMissions(Boolean readyForNextMissions) {
+        isReadyForNextMissions = readyForNextMissions;
     }
 
     @Override
@@ -62,11 +49,26 @@ public class CrewMember extends AbstractBaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CrewMember that = (CrewMember) o;
-        return doesHeIsSurvive == that.doesHeIsSurvive && role == that.role && rank == that.rank;
+        return getId().equals(that.getId()) &&
+                getName().equals(that.getName()) &&
+                memberRole == that.memberRole &&
+                memberRank == that.memberRank &&
+                Objects.equals(isReadyForNextMissions, that.isReadyForNextMissions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(role, rank, doesHeIsSurvive);
+        return Objects.hash(getId(), getName(), memberRole, memberRank, isReadyForNextMissions);
+    }
+
+    @Override
+    public String toString() {
+        return "\nCrewMember{\n" +
+                "\tid: " + getId() +
+                "\n\tname: " + getName() +
+                "\n\tmemberRole: " + memberRole +
+                "\n\tmemberRank: " + memberRank +
+                "\n\tisReadyForNextMissions: " + isReadyForNextMissions +
+                "\n}";
     }
 }

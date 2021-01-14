@@ -1,6 +1,14 @@
 package com.epam.jwd.core_final.domain;
 
-import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,69 +25,68 @@ import java.util.Objects;
  */
 public class FlightMission extends AbstractBaseEntity {
     // todo
-
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private long missionsDistance;
+    private static Long idUnique = 0L;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private final LocalDateTime startDate;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private final LocalDateTime endDate;
+    private final Long distance;
     private Spaceship assignedSpaceship;
     private List<CrewMember> assignedCrew;
     private MissionResult missionResult;
 
-    public FlightMission(Long id, String name,
-                         LocalDate startDate,
-                         LocalDate endDate,
-                         long missionsDistance,
-                         MissionResult flightMissionResult) {
-        super(name, id);
+    public FlightMission(String name, LocalDateTime startDate, LocalDateTime endDate, Long distance,
+                         MissionResult missionResult) {
+        super(idUnique++, name);
         this.startDate = startDate;
         this.endDate = endDate;
-        this.missionsDistance = missionsDistance;
-        this.missionResult = flightMissionResult;
+        this.distance = distance;
+        this.missionResult = missionResult;
     }
 
+    public FlightMission(String name, LocalDateTime startDate, LocalDateTime endDate, Long distance,
+                         Spaceship assignedSpaceship, List<CrewMember> assignedCrew, MissionResult missionResult) {
+        super(idUnique++, name);
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.distance = distance;
+        this.assignedSpaceship = assignedSpaceship;
+        this.assignedCrew = assignedCrew;
+        this.missionResult = missionResult;
+    }
 
-    public LocalDate getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public LocalDate getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public long getMissionsDistance() {
-        return missionsDistance;
+    public Long getDistance() {
+        return distance;
     }
 
     public Spaceship getAssignedSpaceship() {
         return assignedSpaceship;
     }
 
-    public List<CrewMember> getAssignedCrew() {
-        return assignedCrew;
-    }
-
-    public MissionResult getMissionResult() {
-        return missionResult;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public void setMissionsDistance(long missionsDistance) {
-        this.missionsDistance = missionsDistance;
-    }
-
     public void setAssignedSpaceship(Spaceship assignedSpaceship) {
         this.assignedSpaceship = assignedSpaceship;
     }
 
-    public void setAssignedCrew(List<CrewMember> crew) {
-        this.assignedCrew = crew;
+    public List<CrewMember> getAssignedCrew() {
+        return new ArrayList<>(assignedCrew);
+    }
+
+    public void setAssignedCrew(List<CrewMember> assignedCrew) {
+        this.assignedCrew = assignedCrew;
+    }
+
+    public MissionResult getMissionResult() {
+        return missionResult;
     }
 
     public void setMissionResult(MissionResult missionResult) {
@@ -87,27 +94,44 @@ public class FlightMission extends AbstractBaseEntity {
     }
 
     @Override
-    public String toString() {
-        return "FlightMission{" +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", missionsDistance=" + missionsDistance +
-                ", spaceship=" + assignedSpaceship +
-                ", assignedCrew=" + assignedCrew +
-                ", missionResult=" + missionResult +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FlightMission that = (FlightMission) o;
-        return missionsDistance == that.missionsDistance && startDate.equals(that.startDate) && endDate.equals(that.endDate) && assignedSpaceship.equals(that.assignedSpaceship) && assignedCrew.equals(that.assignedCrew) && missionResult == that.missionResult;
+        return getId().equals(that.getId()) &&
+                getName().equals(that.getName()) &&
+                Objects.equals(startDate, that.startDate) &&
+                Objects.equals(endDate, that.endDate) &&
+                Objects.equals(distance, that.distance) &&
+                Objects.equals(assignedSpaceship, that.assignedSpaceship) &&
+                Objects.equals(assignedCrew, that.assignedCrew) &&
+                missionResult == that.missionResult;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(startDate, endDate, missionsDistance, assignedSpaceship, assignedCrew, missionResult);
+        return Objects.hash(getId(), getName(), startDate, endDate, distance, assignedSpaceship, assignedCrew,
+                missionResult);
+    }
+
+    @Override
+    public String toString() {
+        return "FlightMission{ \n" +
+                "Id: " + getId() +
+                "\nName: " + getName() +
+                "\nStartDate: " + startDate +
+                "\nEndDate: " + endDate +
+                "\nDistance: " + distance +
+                "\n### AssignedSpaceship ###: " + assignedSpaceship +
+                "\n\n\n### AssignedCrew ###: " + assignedCrew +
+                "\nMissionResult: " + missionResult +
+                "\n}";
+    }
+
+    public String convertToJson() throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        return mapper.writeValueAsString(this);
     }
 }

@@ -3,6 +3,7 @@ package com.epam.jwd.core_final;
 
 import com.epam.jwd.core_final.context.Application;
 import com.epam.jwd.core_final.context.ApplicationMenu;
+import com.epam.jwd.core_final.context.impl.ApplicationMenuImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,4 +19,5 @@ public class Main {
             LOGGER.error(e.getMessage(), e);
         }
     }
+    //Artem
 }

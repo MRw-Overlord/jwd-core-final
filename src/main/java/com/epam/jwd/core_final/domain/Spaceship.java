@@ -1,5 +1,6 @@
 package com.epam.jwd.core_final.domain;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -10,45 +11,33 @@ import java.util.Objects;
  */
 public class Spaceship extends AbstractBaseEntity {
     //todo
-    private Map<Role, Short> crew;
-    private long totalAvailableFlightDistance;
-    private boolean isReadyForNextMissions = true;
+    private static Long idUnique = 0L;
 
-    public Spaceship(Long id, String name, Map<Role, Short> crew, Long totalAvailableFlightDistance) {
-        super(name, id);
-        this.crew = crew;
-        this.totalAvailableFlightDistance = totalAvailableFlightDistance;
+    private final Map<Role, Short> mapByRoleShort;
+    private Long flightDistance;
+    private Boolean isReadyForNextMission;
+
+    public Spaceship(String name, Map<Role, Short> mapByRoleShort, Long flightDistance) {
+        super(idUnique++, name);
+        this.mapByRoleShort = mapByRoleShort;
+        this.flightDistance = flightDistance;
+        this.isReadyForNextMission = true;
     }
 
-    public Map<Role, Short> getCrew() {
-        return crew;
+    public Map<Role, Short> getMapByRoleShort() {
+        return new HashMap<>(mapByRoleShort);
     }
 
-    public long getTotalAvailableFlightDistance() {
-        return totalAvailableFlightDistance;
+    public Long getFlightDistance() {
+        return flightDistance;
     }
 
-    public boolean isReadyForNextMissions() {
-        return isReadyForNextMissions;
+    public Boolean getReadyForNextMission() {
+        return isReadyForNextMission;
     }
 
-    public void setCrew(Map<Role, Short> crew) {
-        this.crew = crew;
-    }
-
-    public void setTotalAvailableFlightDistance(long totalAvailableFlightDistance) {
-        this.totalAvailableFlightDistance = totalAvailableFlightDistance;
-    }
-
-    public void setReadyForNextMissions(boolean readyForNextMissions) {
-        isReadyForNextMissions = readyForNextMissions;
-    }
-
-    @Override
-    public String toString() {
-        return ("Spaceship -- name: " + super.getName()
-                + " Flight Distance: " + totalAvailableFlightDistance
-                + " Is ready for next missions: " + isReadyForNextMissions);
+    public void setReadyForNextMission(Boolean readyForNextMission) {
+        isReadyForNextMission = readyForNextMission;
     }
 
     @Override
@@ -56,13 +45,26 @@ public class Spaceship extends AbstractBaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Spaceship spaceship = (Spaceship) o;
-        return totalAvailableFlightDistance == spaceship.totalAvailableFlightDistance &&
-                isReadyForNextMissions == spaceship.isReadyForNextMissions &&
-                crew.equals(spaceship.crew);
+        return getId().equals(spaceship.getId()) &&
+                getName().equals(spaceship.getName()) &&
+                Objects.equals(mapByRoleShort, spaceship.mapByRoleShort) &&
+                Objects.equals(flightDistance, spaceship.flightDistance) &&
+                Objects.equals(isReadyForNextMission, spaceship.isReadyForNextMission);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(crew, totalAvailableFlightDistance, isReadyForNextMissions);
+        return Objects.hash(getId(), getName(), mapByRoleShort, flightDistance, isReadyForNextMission);
+    }
+
+    @Override
+    public String toString() {
+        return "Spaceship{\n" +
+                "\tid: " + getId() +
+                "\n\tname: " + getName() +
+                "\n\tcapacityByRole: " + mapByRoleShort +
+                "\n\tflightDistance: " + flightDistance +
+                "\n\tisReadyForNextMission: " + isReadyForNextMission +
+                "\n}";
     }
 }

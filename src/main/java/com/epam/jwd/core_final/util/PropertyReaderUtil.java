@@ -14,9 +14,9 @@ import java.util.regex.Pattern;
 
 public final class PropertyReaderUtil {
     private static Logger LOGGER = LoggerFactory.getLogger(PropertyReaderUtil.class);
-
     private static final Properties properties = new Properties();
     private PropertyReaderUtil() {
+
     }
 
     /**
@@ -35,14 +35,15 @@ public final class PropertyReaderUtil {
             while ((count = inputStream.read()) != -1) {
                 text.append((char) count);
             }
-            Pattern pattern = Pattern.compile("^(?=(.|\n|\r)*inputRootDir=([\\w\\d-]+))" +
-                    "(?=(.|\n|\r)*outputRootDir=([\\w\\d-]+))" +
-                    "(?=(.|\n|\r)*crewFileName=([\\w\\d-]+))" +
-                    "(?=(.|\n|\r)*missionsFileName=([\\w\\d-]+))" +
-                    "(?=(.|\n|\r)*spaceshipsFileName=([\\w\\d-]+))" +
+            String regex = "^(?=(.|\n|\r)*inputRootDir=([\\w\\d]+))" +
+                    "(?=(.|\n|\r)*outputRootDir=([\\w\\d]+))" +
+                    "(?=(.|\n|\r)*crewFileName=([\\w\\d]+))" +
+                    "(?=(.|\n|\r)*missionsFileName=([\\w\\d]+))" +
+                    "(?=(.|\n|\r)*spaceshipsFileName=([\\w\\d]+))" +
                     "(?=(.|\n|\r)*fileRefreshRate=(\\d+))" +
-                    "(?=(.|\n|\r)*dateTimeFormat=([a-zA-Z:\\-\\s]+))" +
-                    "[a-zA-Z\\d]+=.+(\r?\n(\r?\n)*[a-zA-Z\\d]+=.+)*$");
+                    "(?=(.|\n|\r)*dateTimeFormat=([a-zA-Z:\\-\\s]+))";/* +
+                   "[a-zA-Z\\d]+=.+(\r?\n(\r?\n)*[a-zA-Z\\d]+=.+)*$";*/
+            Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(text);
             if (matcher.find()){
                 ApplicationProperties applicationProperties = new ApplicationProperties(matcher.group(2),

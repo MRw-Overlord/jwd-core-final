@@ -8,56 +8,71 @@ import com.epam.jwd.core_final.domain.Role;
  * Should be a builder for {@link com.epam.jwd.core_final.domain.CrewMember} fields
  */
 public class CrewMemberCriteria extends Criteria<CrewMember> {
-    private final Role role;
-    private final Rank rank;
-    private final Boolean doesHeIsSurvive;
 
-    private CrewMemberCriteria(Builder builder){
-        super(builder);
-        this.role = builder.role;
-        this.rank = builder.rank;
-        this.doesHeIsSurvive = builder.doesHeIsSurvive;
+    private final Role memberRole;
+    private final Rank memberRank;
+    private final Boolean readyForNextMission;
+
+    private CrewMemberCriteria(Long whereId, String whereName, Role memberRole, Rank memberRank,
+                               Boolean readyForNextMission) {
+        super(whereId, whereName);
+        this.memberRole = memberRole;
+        this.memberRank = memberRank;
+        this.readyForNextMission = readyForNextMission;
     }
 
-    public Role getRole() {
-        return role;
+    public Role getMemberRole() {
+        return memberRole;
     }
 
-    public Rank getRank() {
-        return rank;
+    public Rank getMemberRank() {
+        return memberRank;
     }
 
-    public Boolean isDoesHeIsSurvive() {
-        return doesHeIsSurvive;
+    public Boolean getReadyForNextMission() {
+        return readyForNextMission;
     }
 
-    @Override
-    public void setName(String name) {
-        super.setName(name);
+    public static Builder builder() {
+        return new Builder();
     }
 
-    public static class Builder extends Criteria.Builder{
-        private Role role;
-        private Rank rank;
-        private Boolean doesHeIsSurvive;
+    private static class Builder {
 
-        public Builder setRole(Role role){
-            this.role = role;
+        private Long id;
+        private String name;
+        private Role memberRole;
+        private Rank memberRank;
+        private Boolean readyForNextMission;
+
+        public Builder setId(Long id) {
+            this.id = id;
             return this;
         }
 
-        public Builder setRank(Rank rank){
-            this.rank = rank;
+        public Builder setName(String name) {
+            this.name = name;
             return this;
         }
 
-        public Builder setDoesHeIsSurvive(Boolean doesHeIsSurvive){
-            this.doesHeIsSurvive = doesHeIsSurvive;
+        public Builder setRole(Role role) {
+            memberRole = role;
             return this;
         }
 
-        public CrewMemberCriteria build(){
-            return new CrewMemberCriteria(this);
+        public Builder setRank(Rank rank) {
+            memberRank = rank;
+            return this;
+        }
+
+        public Builder setReadyForNextMission(Boolean isReadyForNextMission) {
+            readyForNextMission = isReadyForNextMission;
+            return this;
+        }
+
+        public CrewMemberCriteria build() {
+            return new CrewMemberCriteria(id, name, memberRole, memberRank,
+                    readyForNextMission);
         }
     }
 }

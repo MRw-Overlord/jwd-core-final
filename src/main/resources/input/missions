@@ -1,21 +1,21 @@
-Delivery of cargo
-Destroy planet
-Expedition to the andromeda galaxy
-Purchase of weapons for warships
-Trade
-Carriage of passengers
-Escort of a passenger spaceship
-Escort of a cargo spaceship
-Escort of a research spaceship
-Escort of a combat spaceship
-Exploration of distant galaxies
-Destroy a cargo spaceship
-Destroy a passenger spaceship
-Destroy a research spaceship
-Destroy a combat spaceship
-Spaceship repair
-Help for damaged spaceships
-Defense of the planet
-Defense of the star system
-Exploration of a black hole
-Exploration of a planet
+1;Delivery of cargo;2021-01-18;2025-01-18;516976;
+2;Destroy planet;2019-05-17;2021-06-30;547362;
+3;Expedition to the andromeda galaxy;2015-05-17;2025-06-30;986325;
+4;Purchase of weapons for warships;2019-05-17;2024-06-30;145258;
+5;Trade;2015-05-17;2026-06-30;359751;
+6;Carriage of passengers;2016-05-17;2031-06-30;456987;
+7;Escort of a passenger spaceship;2028-05-17;2031-06-30;624831;
+8;Escort of a cargo spaceship;2027-05-17;2035-06-30;987315;
+9;Escort of a research spaceship;2028-05-17;2030-06-30;864315;
+10;Escort of a combat spaceship;2024-05-17;2029-06-30;745218;
+11;Exploration of distant galaxies;2026-05-17;2037-06-30;625934;
+12;Destroy a cargo spaceship;2014-05-17;2015-06-30;715953;
+13;Destroy a passenger spaceship;2025-05-17;2026-06-30;153957;
+14;Destroy a research spaceship;2030-05-17;2034-06-30;645825;
+15;Destroy a combat spaceship;2031-05-17;2032-06-30;951673;
+16;Spaceship repair;2025-05-17;2026-06-30;461882;
+17;Help for damaged spaceships;2027-05-17;2028-06-30;761548;
+18;Defense of the planet;2029-05-17;2030-06-30;369451;
+19;Defense of the star system;2029-05-17;2038-06-30;751265;
+20;Exploration of a black hole;2021-05-17;2022-06-30;24512;
+21;Exploration of a planet;2020-05-17;2023-06-30;14251;
