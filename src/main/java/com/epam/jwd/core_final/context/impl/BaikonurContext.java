@@ -94,14 +94,15 @@ public class BaikonurContext implements ApplicationContext {
 
     private void generateFlightMissions() throws InvalidStateException {
         Random random = new Random(System.currentTimeMillis());
-        String text = readTextFromFile(FILE_DIRECTORY, MISSION_FILE_NAME);
         FlightMissionFactory flightMissionFactory = FlightMissionFactory.createInstance();
-        String[] missionNames = text.split("\r?\n");
-        List<String> listOfMissionNames = Arrays.stream(missionNames).collect(Collectors.toList());
+        String text = readTextFromFile(FILE_DIRECTORY, MISSION_FILE_NAME);
+        List<String> listOfMissionNames = Arrays.stream(text.split("\r?\n")).collect(Collectors.toList());
         List<Spaceship> allSpaceships = spaceships.stream()
-                .filter(Spaceship::getReadyForNextMission).collect(Collectors.toList());
+                .filter(Spaceship::getReadyForNextMission)
+                .collect(Collectors.toList());
         List<CrewMember> allCrewMembers = crewMembers.stream()
-                .filter(CrewMember::getReadyForNextMissions).collect(Collectors.toList());
+                .filter(CrewMember::getReadyForNextMissions)
+                .collect(Collectors.toList());
         if (listOfMissionNames.isEmpty() || allSpaceships.isEmpty() || allCrewMembers.isEmpty()) {
             throw new InvalidStateException("Flight mission generation is not possible." +
                     " Mission names or spaceships or crewMembers is unavailable");
@@ -160,25 +161,15 @@ public class BaikonurContext implements ApplicationContext {
     }
 
     private long generateFlightMissionDistance(Random random) {
-        final long lowOffset = 85462;
-        final long highOffset = 998512;
-        return randLong(random, lowOffset, highOffset);
+        return randLong(random, 85462, 998512);
     }
 
     private LocalDateTime generateStartDateTimeForFlightMission(Random random) {
-        //  30 min in seconds
-        final long lowOffset = 1800;
-        // 2 weeks in seconds
-        final long highOffset = 1209600;
-        return LocalDateTime.now().plusSeconds(randLong(random, lowOffset, highOffset));
+        return LocalDateTime.now().plusSeconds(randLong(random, 1800, 1209600));
     }
 
     private LocalDateTime generateEndDateTimeForFlightMission(Random random, LocalDateTime missionStart) {
-        //  2 hours in seconds
-        final long lowOffset = 7200;
-        // 2 weeks in seconds
-        final long highOffset = 1209600;
-        return missionStart.plusSeconds(randLong(random, lowOffset, highOffset));
+        return missionStart.plusSeconds(randLong(random, 7200, 1209600));
     }
 
     private int randInt(Random random, int lowLimit, int highLimit) {

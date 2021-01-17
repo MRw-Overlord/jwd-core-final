@@ -16,6 +16,7 @@ import com.epam.jwd.core_final.service.impl.SpaceshipServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -77,18 +78,16 @@ public class ApplicationMenuImpl implements ApplicationMenu {
             System.out.println(MAIN_MENU);
             String command = handleUserInput("Enter command: ");
             switch (command.toLowerCase()) {
-                case ("1"):
-                case ("show all crew members"): {
+                case ("1"): {
                     crewService.findAllCrewMembers().forEach(System.out::println);
                     break;
-                }case ("2"):
-                case ("show all spaceships"): {
+                }
+                case ("2"): {
                     spaceshipService.findAllSpaceships().forEach(System.out::println);
                     break;
                 }
 
-                case ("3"):
-                case ("show all flight missions"): {
+                case ("3"): {
                     missionService.findAllMissions().forEach(System.out::println);
                     break;
                 }
@@ -97,12 +96,11 @@ public class ApplicationMenuImpl implements ApplicationMenu {
                     flightMissionsMenu();
                     break;
                 }
-                case ("5"):
-                case ("exit"): {
+                case ("5"): {
                     applicationRun = false;
                     break;
                 }
-                default:{
+                default: {
                     System.out.println("Try again!! ");
                 }
             }
@@ -121,8 +119,7 @@ public class ApplicationMenuImpl implements ApplicationMenu {
             System.out.println(FLIGHT_MISSIONS_MENU);
             String command = handleUserInput("Enter command: ");
             switch (command.toLowerCase()) {
-                case ("1"):
-                case ("create flight mission"): {
+                case ("1"): {
                     String inputMissionName = handleUserInput("Enter mission name: ");
                     String inputMissionStartDateTime = handleUserInput(
                             "Enter mission start date time in format yyyy-MM-dd HH:mm:ss: ");
@@ -137,22 +134,18 @@ public class ApplicationMenuImpl implements ApplicationMenu {
                             missionService.createMission(entityFactory.create(inputMissionName, missionStart, missionEnd,
                                     missionDistance, MissionResult.PLANNED));
                         } else {
-                            System.out.println("You may enter mission distance >0");
+                            System.out.println("You may enter mission distance > 0 !!!");
                         }
                     } catch (DateTimeParseException | NumberFormatException | NonUniqueEntityNameException e) {
                         LOGGER.warn("Error of input data in mission creation", e);
                         System.out.println("Invalid input in mission creation");
                     }
                 }
-                case ("2"):
-                case ("export flight missions to file in Json format"): {
+                case ("2"): {
                     List<FlightMission> flightMissions = missionService.findAllMissions();
-                    File filePath = new File(String.format("src/main/resources/%s", fileDirectory));
-                    filePath.mkdirs();
-                    File file = new File(filePath + "/" + fileName + ".json");
+                    File file = new File(String.format("src/main/resources/%s/%s.json", fileDirectory,fileName));
                     try (FileWriter fileWriter = new FileWriter(file)) {
                         if (!flightMissions.isEmpty()) {
-                            fileWriter.append("[");
                             List<String> strings = flightMissions.stream().map(flightMission -> {
                                 try {
                                     return flightMission.convertToJson();
@@ -162,17 +155,14 @@ public class ApplicationMenuImpl implements ApplicationMenu {
                                 return null;
                             }).collect(Collectors.toList());
                             String result = String.join(",\r\n", strings);
-                            fileWriter.append(result);
-                            fileWriter.append("]\r\n");
+                           fileWriter.append(result);
                         }
-                        fileWriter.flush();
                     } catch (IOException e) {
                         LOGGER.error("File not found or json serialization error", e);
                     }
                     break;
                 }
-                case ("3"):
-                case ("back to previous menu"): {
+                case ("3"): {
                     newIteration = false;
                     break;
                 }

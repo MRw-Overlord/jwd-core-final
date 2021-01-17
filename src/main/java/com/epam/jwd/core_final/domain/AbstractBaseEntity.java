@@ -1,11 +1,14 @@
 package com.epam.jwd.core_final.domain;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 /**
  * Expected fields:
  * <p>
  * id {@link Long} - entity id
  * name {@link String} - entity name
  */
+@JsonAutoDetect
 public abstract class AbstractBaseEntity implements BaseEntity {
 
     private final Long id;

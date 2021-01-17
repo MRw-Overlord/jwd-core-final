@@ -1,5 +1,6 @@
 package com.epam.jwd.core_final.domain;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -130,8 +131,8 @@ public class FlightMission extends AbstractBaseEntity {
 
     public String convertToJson() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        //mapper.registerModule(new JavaTimeModule());
+        //mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         return mapper.writeValueAsString(this);
     }
 }
